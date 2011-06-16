@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_gravity="center" android:gravity="center"
+	android:layout_width="438px" android:layout_height="438px"
+	android:background="@android:color/white">
+
+	<ImageView android:id="@+id/df_back_feet"
+		android:layout_width="wrap_content" android:layout_height="wrap_content"
+		android:src="@drawable/dogfan_feet" />
+	<ImageView android:id="@+id/df_back" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/dogfan_back" />
+	<!--
+		<ImageView android:id="@+id/df_fan" android:layout_width="400px"
+		android:layout_height="415px" android:src="@drawable/dogfan_fan"
+		android:scaleType="center" />
+	-->
+	<ImageView android:id="@+id/df_fan" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/dogfan_fan"
+		android:layout_marginLeft="84px" android:layout_marginTop="95px" />
+	<ImageView android:id="@+id/df_power" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/dogfan_power" />
+	<ImageView android:id="@+id/df_front" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/dogfan_front" />
+	<ImageView android:id="@+id/df_face" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:src="@drawable/dogfan_face" />
+	<ImageView android:id="@+id/df_plug" android:layout_width="wrap_content"
+		android:layout_height="wrap_content" android:layout_alignRight="@id/df_back"
+		android:src="@drawable/dogfan_plug" />
+
+</RelativeLayout>

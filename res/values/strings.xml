@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="hello">Hello World!</string>
+    <string name="app_name">Dogfan</string>
+    <string name="options_title_youtube">YouTube</string>
+    <string name="options_title_about">About</string>
+    <string name="ok">OK</string>
+</resources>
