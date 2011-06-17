@@ -7,11 +7,13 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 
 public class ExtraAnimationUtils {
-    
+
     public static final void stopAnimation(final View view) {
         Animation animation = view.getAnimation();
-        animation.setAnimationListener(null);
-        view.setAnimation(null);
+        if ( animation != null ) {
+            animation.setAnimationListener(null);
+            view.setAnimation(null);
+        }
     }
 
     public static final void startRepeatingAnimationSet(final View view,

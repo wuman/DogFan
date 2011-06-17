@@ -8,6 +8,10 @@ import android.provider.Browser;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
@@ -17,6 +21,9 @@ public class DogfanActivity extends Activity {
 
     private static final String YOUTUBE_LINK = "http://www.youtube.com/watch?v=j_6qn9FDQno";
 
+    private boolean mPower;
+
+    private ImageView mPlugView;
     private ImageView mFanView;
     private ImageView mFrontView;
     private ImageView mFaceView;
@@ -26,30 +33,85 @@ public class DogfanActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
+        mPower = false;
+
+        mPlugView = (ImageView) findViewById(R.id.df_plug);
         mFanView = (ImageView) findViewById(R.id.df_fan);
         mFrontView = (ImageView) findViewById(R.id.df_front);
         mFaceView = (ImageView) findViewById(R.id.df_face);
+
+        mPlugView.setTag(true);
+        mPlugView.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View widget) {
+                Animation currentAnimation = widget.getAnimation();
+                if ( currentAnimation == null || currentAnimation.hasEnded() ) {
+                    mPower = !mPower;
+                    updateUIStates();
+                }
+            }
+
+        });
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        mFanView.startAnimation(AnimationUtils.loadAnimation(this,
-            R.anim.fan_rotation));
-        ExtraAnimationUtils.startRepeatingAnimationSet(mFrontView, 200L,
-            R.anim.front_shake_0, R.anim.front_shake_1, R.anim.front_shake_2,
-            R.anim.front_shake_3, R.anim.front_shake_4, R.anim.front_shake_5);
-        ExtraAnimationUtils.startRepeatingAnimationSet(mFaceView, 200L,
-            R.anim.face_shake_0, R.anim.face_shake_1, R.anim.face_shake_2,
-            R.anim.face_shake_3, R.anim.face_shake_4, R.anim.face_shake_5);
+        updateUIStates();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        ExtraAnimationUtils.stopAnimation(mFanView);
-        ExtraAnimationUtils.stopAnimation(mFrontView);
-        ExtraAnimationUtils.stopAnimation(mFaceView);
+        updateFans(false);
+    }
+
+    private void updateUIStates() {
+        Animation currentPlugAnimation = mPlugView.getAnimation();
+        if ( currentPlugAnimation == null || currentPlugAnimation.hasEnded() ) {
+            Animation plugAnimation = AnimationUtils.loadAnimation(this, mPower
+                ? R.anim.cord_down : R.anim.cord_up);
+            plugAnimation.setAnimationListener(new AnimationListener() {
+
+                @Override
+                public void onAnimationEnd(Animation animation) {
+                    updateFans(mPower);
+                }
+
+                @Override
+                public void onAnimationRepeat(Animation animation) {
+                    // TODO Auto-generated method stub
+
+                }
+
+                @Override
+                public void onAnimationStart(Animation animation) {
+                    // TODO Auto-generated method stub
+
+                }
+
+            });
+            mPlugView.startAnimation(plugAnimation);
+        }
+    }
+
+    private void updateFans(boolean start) {
+        if ( start ) {
+            mFanView.startAnimation(AnimationUtils.loadAnimation(this,
+                R.anim.fan_rotation));
+            ExtraAnimationUtils.startRepeatingAnimationSet(mFrontView, 200L,
+                R.anim.front_shake_0, R.anim.front_shake_1,
+                R.anim.front_shake_2, R.anim.front_shake_3,
+                R.anim.front_shake_4, R.anim.front_shake_5);
+            ExtraAnimationUtils.startRepeatingAnimationSet(mFaceView, 200L,
+                R.anim.face_shake_0, R.anim.face_shake_1, R.anim.face_shake_2,
+                R.anim.face_shake_3, R.anim.face_shake_4, R.anim.face_shake_5);
+        } else {
+            ExtraAnimationUtils.stopAnimation(mFanView);
+            ExtraAnimationUtils.stopAnimation(mFrontView);
+            ExtraAnimationUtils.stopAnimation(mFaceView);
+        }
     }
 
     @Override
@@ -58,7 +120,7 @@ public class DogfanActivity extends Activity {
         inflater.inflate(R.menu.options_menu, menu);
         return true;
     }
-    
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch ( item.getItemId() ) {
