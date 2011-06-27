@@ -2,6 +2,8 @@ package com.wuman.dogfan;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Browser;
@@ -27,6 +29,8 @@ public class DogfanActivity extends Activity {
     private ImageView mFanView;
     private ImageView mFrontView;
     private ImageView mFaceView;
+    private SoundPool mSoundPool;
+    private int mSoundId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +57,9 @@ public class DogfanActivity extends Activity {
             }
 
         });
+
+        mSoundPool = new SoundPool(2, AudioManager.STREAM_MUSIC, 0);
+        mSoundId = mSoundPool.load(this, R.raw.ahahah, 1);
     }
 
     @Override
@@ -67,6 +74,17 @@ public class DogfanActivity extends Activity {
         updateFans(false);
     }
 
+    @Override
+    protected void onDestroy() {
+        mSoundPool.release();
+        mSoundPool = null;
+        super.onDestroy();
+    }
+
+    private int playSound() {
+        return mSoundPool.play(mSoundId, 1.0f, 1.0f, 0, 0, 1.0f);
+    }
+
     private void updateUIStates() {
         Animation currentPlugAnimation = mPlugView.getAnimation();
         if ( currentPlugAnimation == null || currentPlugAnimation.hasEnded() ) {
@@ -77,6 +95,9 @@ public class DogfanActivity extends Activity {
                 @Override
                 public void onAnimationEnd(Animation animation) {
                     updateFans(mPower);
+                    if ( mPower ) {
+                        playSound();
+                    }
                 }
 
                 @Override
